@@ -20,7 +20,7 @@
 		const w = canvas.width;
 		const h = canvas.height;
 		const ballSize = 20; //wielkość pilki
-		let ballX = w/2 - ballSize/2;    //pozycja na osi X od 490 do 510px
+		let ballX = w/2 - ballSize/2;    //pozycja na osi X od 490 do 510px  bo rysuje od lewy gorny rog
 		let ballY = h/2 - ballSize/2;	//pozycja na osi Y od 240 do 260px
 		const paddleHeight = 100;
 		const paddleWidth = 20;
@@ -50,26 +50,23 @@
 		}
 		function ball()
 		{
-		ctx.fillStyle = "white";
-		ctx.fillRect(ballX, ballY, ballSize, ballSize);   //1000/2 - 20/2,
+			ctx.fillStyle = "white";
+			ctx.fillRect(ballX, ballY, ballSize, ballSize);   //1000/2 - 20/2,
 		
-		ballX += ballSpeedX;
-		ballY += ballSpeedY;
+			ballX += ballSpeedX;
+			ballY += ballSpeedY;
 		
-		if (ballY <= 0 || ballY+ballSize >= h) 			//pozycja kulki jest liczona od lewy gorny
-			{
-				ballSpeedY = -ballSpeedY;
-			}
-		if (ballX <=0 || ballX+ballSize >= w )           //980px +20px
-			{
-				ballSpeedX= -ballSpeedX;
-			}
+			if (ballY <= 0 || ballY+ballSize >= h) 			//pozycja kulki jest liczona od lewy gorny
+				{
+					ballSpeedY = -ballSpeedY;
+					speedUp();
+				}
+			if (ballX <=0 || ballX+ballSize >= w )           //980px +20px
+				{
+					ballSpeedX= -ballSpeedX;
+					speedUp();
+				}
 		}
-		
-		
-		
-		
-		
 		
 		
 		
@@ -86,16 +83,88 @@
 			
 			
 								//mouse
-		topCanvas = canvas.offsetTop;                 //pole nad canvas		
-		
 		}
 		function playerPosition(e)                     //e daje info
 		{
+		topCanvas = canvas.offsetTop;                 //pole nad canvas	
 		//		console.log("Pozycja myszy to " + (e.clientY - topCanvas))       
 			playerY = e.clientY - topCanvas - paddleHeight/2;
+			
+			if (playerY <= 0)
+				{
+					playerY=0;
+				}
+			if (playerY >= h-paddleHeight)            //400 >= 500-100
+				{
+					playerY=h-paddleHeight;
+				}
+			
+			//aiY=playerY;
 		}
 		canvas.addEventListener("mousemove", playerPosition)      //nasluchuje mysz i wywoluje funkcje
 		
+		
+		function speedUp()
+			{
+				//console.log(ballSpeedX)
+				//console.log("Predkość Y " +(ballSpeedY))
+				//prędkość X
+				if(ballSpeedX > 0 && ballSpeedX < 16)
+					{
+						ballSpeedX+= .4; 									//0.4 = .4
+					}
+				else if(ballSpeedX < 0 && ballSpeedX > -16)
+					{
+						ballSpeedX+=-0.4;
+					}
+				if(ballSpeedY > 0 && ballSpeedY < 16)
+					{
+						ballSpeedY+=.3;
+					}
+				else if(ballSpeedY < 0 && ballSpeedY > -16)
+					{
+						ballSpeedY+=-0.3;
+					}
+			}
+		
+		
+		function aiPosition()
+			{
+					const middlePaddle= aiY + paddleHeight/2;   			//srodek rakietki
+					const middleBall= ballY+ ballSize/2;
+					
+				if (ballX > 500)
+				{
+						if (middlePaddle- middleBall > 200)				//>+ 200
+						{
+							aiY -=24;										// rakietka idzie do gory
+						}
+						else if (middlePaddle - middleBall > 50) 	// 50 - 200
+						{
+							aiY-= 10;
+						}
+						else if (middlePaddle- middleBall < -200)   // -200...
+						{
+							aiY+=24;										// idzie na dol
+						}		
+						else if (middlePaddle - middleBall < -50)    //-50 - -200
+						{
+							aiY+= 10;
+						}	
+				}
+				 if (ballX <= 500 && ballX >150)
+				{
+										if (middlePaddle - middleBall > 100 )
+										{
+											aiY-=3
+										}
+										else if(middlePaddle- middleBall < -100)
+										{
+											aiY +=3;
+										}
+				}
+				
+			}
 		
 		
 		
@@ -105,18 +174,10 @@
 			ball()
 			player()
 			ai()
+			aiPosition()
 		}
 		
-		setInterval(game, 1000 / 60)     //wywoluje 60 funkci game na sekunde 1s=1000ms
-		
-		
-		
-		
-		
-					
-		
-		
-		
+		setInterval(game, 1000 / 60)     //wywoluje 60 funkcji game na sekunde 1s=1000ms
 		
 		
 		
@@ -124,7 +185,6 @@
 	</script>
 	
 	
-
 
 </body>
 </html>
