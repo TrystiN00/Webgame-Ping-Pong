@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html lang= "5">
+<head>
+	<meta charset= "utf-8">
+	<meta name= "viewport" content= "width=device-width, initial-scale=1.0">
+	<title>Ping-Pong</title>
+	<link rel= "stylesheet" href= "style.css">
+	
+
+</head>
+<body>
+	<canvas></canvas>
+	<script>
+		const canvas = document.querySelector('canvas');
+		const ctx = canvas.getContext('2d');
+		
+		canvas.width = 1000;
+		canvas.height = 500;
+		
+		const w = canvas.width;
+		const h = canvas.height;
+		const ballSize = 20; //wielkość pilki
+		let ballX = w/2 - ballSize/2;    //pozycja na osi X od 490 do 510px
+		let ballY = h/2 - ballSize/2;	//pozycja na osi Y od 240 do 260px
+		const paddleHeight = 100;
+		const paddleWidth = 20;
+		
+		
+		const playerX = 70;             //pozycja rakietki na osi X, stała
+		const aiX = 910;					// 910+70 + 20 szerokości =1000
+		
+		let playerY = 200;
+		let aiY = 200;
+		
+		const lineWidth = 6;			//środkowa linia przerywana
+		const lineHeight = 16;
+		
+		let ballSpeedX = 3;
+		let ballSpeedY = 3;
+		
+		function player()                //aktualna pozycja rakiety
+		{
+			ctx.fillStyle= "#7FFF00";
+			ctx.fillRect(playerX, playerY,paddleWidth,paddleHeight);
+		}
+		function ai()
+		{
+			ctx.fillStyle="yellow";
+			ctx.fillRect(aiX, aiY, paddleWidth, paddleHeight);
+		}
+		function ball()
+		{
+		ctx.fillStyle = "white";
+		ctx.fillRect(ballX, ballY, ballSize, ballSize);   //1000/2 - 20/2,
+		
+		ballX += ballSpeedX;
+		ballY += ballSpeedY;
+		
+		if (ballY <= 0 || ballY+ballSize >= h) 			//pozycja kulki jest liczona od lewy gorny
+			{
+				ballSpeedY = -ballSpeedY;
+			}
+		if (ballX <=0 || ballX+ballSize >= w )           //980px +20px
+			{
+				ballSpeedX= -ballSpeedX;
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		function table()
+		{
+			ctx.fillStyle= "black";
+			ctx.fillRect(0,0,w,h);
+			
+			for (let linePosition = 20; linePosition < h; linePosition+=30)        
+			{
+				ctx.fillStyle = "gray";
+				ctx.fillRect(w/2 - lineWidth/2, linePosition, lineWidth, lineHeight);
+			}
+			
+			
+								//mouse
+		topCanvas = canvas.offsetTop;                 //pole nad canvas		
+		
+		}
+		function playerPosition(e)                     //e daje info
+		{
+		//		console.log("Pozycja myszy to " + (e.clientY - topCanvas))       
+			playerY = e.clientY - topCanvas - paddleHeight/2;
+		}
+		canvas.addEventListener("mousemove", playerPosition)      //nasluchuje mysz i wywoluje funkcje
+		
+		
+		
+		
+		function game()                                 //wywołuje wszystkie funkcje
+		{
+			table()
+			ball()
+			player()
+			ai()
+		}
+		
+		setInterval(game, 1000 / 60)     //wywoluje 60 funkci game na sekunde 1s=1000ms
+		
+		
+		
+		
+		
+					
+		
+		
+		
+		
+		
+		
+		
+	</script>
+	
+	
+
+
+</body>
+</html>
