@@ -66,6 +66,18 @@
 					ballSpeedX= -ballSpeedX;
 					speedUp();
 				}
+			
+			//odbicie
+			if(ballX>65 && ballX < 75 && ballY >= playerY && ballY <= playerY+paddleHeight )
+			{
+				ballSpeedX = -ballSpeedX;
+			}
+			if(ballX>905 && ballX < 915 && ballY >= aiY && ballY <= playerY+paddleHeight )
+			{
+				ballSpeedX = -ballSpeedX;
+			}
+			
+			
 		}
 		
 		
